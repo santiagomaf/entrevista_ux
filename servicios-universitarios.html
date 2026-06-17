@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>miUANDES — Servicios Universitarios</title>
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    .grid-servicios { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+    .servicio-card {
+      background: var(--blanco); border: 1px solid var(--gris-borde);
+      border-radius: var(--radio); box-shadow: var(--sombra);
+      padding: 22px 18px; text-align: center; cursor: pointer; transition: all .15s;
+    }
+    .servicio-card:hover {
+      border-color: var(--rojo); transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0,0,0,.1);
+    }
+    .servicio-card .icono { font-size: 28px; margin-bottom: 10px; }
+    .servicio-card h4 { margin: 0 0 6px; font-size: 14px; color: var(--tinta); }
+    .servicio-card p { margin: 0; font-size: 12px; color: var(--gris-claro); line-height: 1.4; }
+
+    @media (max-width: 768px) {
+      .grid-servicios { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 480px) {
+      .grid-servicios { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <header class="banner">
+    <div class="banner__logo">mi<span>UANDES</span></div>
+    <button class="hamburger" onclick="toggleNav()">☰</button>
+    <nav class="banner__nav">
+      <a href="index.html">Inicio</a>
+      <a href="info-alumno.html">Info Alumno</a>
+      <a href="servicio-financiero.html">Servicios Financieros</a>
+      <a href="certificados.html">Certificados</a>
+      <a href="facultad.html">Contacto Facultad</a>
+    </nav>
+    <div class="banner__user">
+      <div class="banner__icons">
+        <a href="index.html" title="Notificaciones">✉</a>
+        <a href="servicios-universitarios.html" title="Servicios">⚙</a>
+        <a href="#" title="Centro de ayuda">?</a>
+        <a href="facultad.html" title="Calendario">📅</a>
+      </div>
+      <span class="banner__avatar">SM</span>
+      <span class="user-name">SANTIAGO MARTINEZ</span>
+    </div>
+  </header>
+
+  <div class="subbar">Primer Semestre 2026 &nbsp;<small>· miUANDES</small></div>
+  <div class="breadcrumbs">
+    <a href="index.html">Inicio</a> <span class="sep">›</span> <span class="current">Servicios Universitarios</span>
+  </div>
+
+  <main class="page">
+    <div class="titulo-vista">Servicios Universitarios</div>
+    <div class="grid-servicios">
+      <div class="servicio-card"><div class="icono">📋</div><h4>Solicitudes</h4><p>Solicitudes académicas, cambios de carrera y trámites generales</p></div>
+      <div class="servicio-card"><div class="icono">📖</div><h4>Normativas y Tutoriales</h4><p>Reglamentos, manuales y guías de uso de plataformas</p></div>
+      <div class="servicio-card"><div class="icono">🚑</div><h4>Convenio de Accidentes</h4><p>Activa tu convenio clínico y revisa cobertura ante accidentes</p></div>
+      <div class="servicio-card"><div class="icono">🧠</div><h4>Orientación Psicológica</h4><p>Apoyo profesional gratuito y confidencial para estudiantes</p></div>
+      <div class="servicio-card"><div class="icono">👨‍🏫</div><h4>Profesores</h4><p>Directorio de profesores, horarios de atención y contacto</p></div>
+      <div class="servicio-card"><div class="icono">🏥</div><h4>Clínica</h4><p>Servicios de salud, enfermería y atención médica en campus</p></div>
+      <div class="servicio-card"><div class="icono">⛪</div><h4>Capellanía</h4><p>Acompañamiento espiritual, misas y actividades pastorales</p></div>
+      <div class="servicio-card"><div class="icono">🎥</div><h4>Video Tutoriales</h4><p>Tutoriales en video para plataformas y procesos académicos</p></div>
+      <div class="servicio-card"><div class="icono">🤝</div><h4>CAP — Centro de Apoyo Psicoeducativo</h4><p>Estrategias de estudio, talleres y apoyo académico personalizado</p></div>
+    </div>
+  </main>
+
+  <div id="toast" class="toast"></div>
+  <footer class="proto">Prototipo · miUANDES rediseño · solo para entrevistas de usuario</footer>
+  <script src="shared.js"></script>
+</body>
+</html>

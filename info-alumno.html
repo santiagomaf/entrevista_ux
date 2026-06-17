@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>miUANDES — Info Alumno</title>
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    .notif-bar {
+      background: var(--rojo-claro);
+      border: 1px solid #f5c6cb;
+      border-radius: var(--radio);
+      padding: 12px 18px;
+      margin-bottom: 18px;
+      display: flex; align-items: center; gap: 10px;
+      font-size: 13px; color: var(--rojo);
+      font-weight: 600;
+    }
+    .notif-bar .dot { width: 10px; height: 10px; background: var(--rojo); border-radius: 50%; flex-shrink: 0; }
+
+    .layout {
+      display: grid;
+      grid-template-columns: 220px 1fr;
+      gap: 18px;
+      align-items: start;
+    }
+
+    .sidebar-menu {
+      background: var(--blanco);
+      border: 1px solid var(--gris-borde);
+      border-radius: var(--radio);
+      box-shadow: var(--sombra);
+      overflow: hidden;
+    }
+    .sidebar-menu .menu-item {
+      display: block; padding: 12px 14px; width: 100%;
+      font-size: 13px; font-weight: 500; color: var(--gris-texto);
+      border: none; background: none; text-align: left;
+      border-bottom: 1px solid var(--gris-borde);
+      cursor: pointer; transition: all .12s;
+    }
+    .sidebar-menu .menu-item:last-child { border-bottom: none; }
+    .sidebar-menu .menu-item:hover { background: var(--rojo-claro); color: var(--rojo); }
+    .sidebar-menu .menu-item.is-active {
+      background: var(--rojo); color: #fff; font-weight: 600;
+    }
+    .sidebar-mobile-select {
+      display: none; width: 100%; padding: 10px 12px;
+      border: 1px solid var(--gris-borde); border-radius: var(--radio);
+      font-size: 14px; font-weight: 600; color: var(--gris-texto);
+      background: var(--blanco); margin-bottom: 14px;
+    }
+
+    .content-area {
+      background: var(--blanco);
+      border: 1px solid var(--gris-borde);
+      border-radius: var(--radio);
+      box-shadow: var(--sombra);
+      padding: 22px;
+      min-height: 400px;
+    }
+    .content-area h3 {
+      margin: 0 0 16px; font-size: 16px; color: var(--rojo);
+      padding-bottom: 10px; border-bottom: 1px solid var(--gris-borde);
+    }
+    .info-row {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 10px 0; border-bottom: 1px solid var(--gris-borde);
+      font-size: 13px;
+    }
+    .info-row:last-child { border-bottom: none; }
+    .info-row .label { color: var(--gris-claro); font-weight: 500; }
+    .info-row .value { font-weight: 600; color: var(--tinta); }
+
+    .vista { display: none; }
+    .vista.activa { display: block; }
+
+    .content-tabs {
+      display: flex; gap: 0; margin-bottom: 18px;
+      border-bottom: 2px solid var(--gris-borde);
+    }
+    .content-tab {
+      padding: 10px 20px; font-size: 14px; font-weight: 600;
+      color: var(--gris-claro); cursor: pointer;
+      border: none; background: none;
+      border-bottom: 2px solid transparent;
+      margin-bottom: -2px; transition: all .15s;
+    }
+    .content-tab.is-active { color: var(--rojo); border-bottom-color: var(--rojo); }
+    .content-tab:hover { color: var(--rojo); }
+
+    .resumen-table {
+      width: 100%; border-collapse: collapse; font-size: 13px; margin-bottom: 0;
+    }
+    .resumen-table td {
+      padding: 8px 12px; border: 1px solid var(--gris-borde);
+    }
+    .resumen-table td:first-child {
+      font-weight: 600; color: var(--tinta); background: var(--gris-bg); width: 320px;
+    }
+    .resumen-table td:last-child { text-align: center; }
+    .resumen-disclaimer {
+      font-size: 11px; color: var(--gris-claro); font-style: italic;
+      padding: 8px 12px; border: 1px solid var(--gris-borde); border-top: none;
+      background: #fafbfc; margin-bottom: 18px;
+    }
+
+    .area-header {
+      display: grid; grid-template-columns: 1fr auto auto;
+      font-size: 13px; font-weight: 600;
+      background: var(--gris-bg); border: 1px solid var(--gris-borde);
+      margin-top: 18px;
+    }
+    .area-header span {
+      padding: 8px 12px; border-right: 1px solid var(--gris-borde);
+    }
+    .area-header span:last-child { border-right: none; }
+    .area-header .estado-cumplido { color: #28a745; }
+
+    .malla-table {
+      width: 100%; border-collapse: collapse; font-size: 12px;
+    }
+    .malla-table th {
+      background: var(--gris-bg); padding: 6px 8px;
+      font-weight: 600; color: var(--gris-texto); text-align: left;
+      border: 1px solid var(--gris-borde); font-size: 11px;
+    }
+    .malla-table td {
+      padding: 7px 8px; border: 1px solid var(--gris-borde);
+      color: var(--gris-texto);
+    }
+    .nota-badge {
+      display: inline-block; background: #28a745; color: #fff;
+      border-radius: 4px; padding: 2px 8px; font-weight: 700;
+      font-size: 12px; min-width: 32px; text-align: center;
+    }
+    .check { color: #28a745; font-weight: 700; }
+
+    @media (max-width: 768px) {
+      .layout { grid-template-columns: 1fr; }
+      .sidebar-menu.desktop-only { display: none; }
+      .sidebar-mobile-select { display: block; }
+      .resumen-table td:first-child { width: auto; }
+    }
+  </style>
+</head>
+<body>
+
+  <header class="banner">
+    <div class="banner__logo">mi<span>UANDES</span></div>
+    <button class="hamburger" onclick="toggleNav()">☰</button>
+    <nav class="banner__nav">
+      <a href="index.html">Inicio</a>
+      <a href="info-alumno.html" class="is-active">Info Alumno</a>
+      <a href="servicio-financiero.html">Servicios Financieros</a>
+      <a href="certificados.html">Certificados</a>
+      <a href="facultad.html">Contacto Facultad</a>
+    </nav>
+    <div class="banner__user">
+      <div class="banner__icons">
+        <a href="index.html" title="Notificaciones">✉</a>
+        <a href="servicios-universitarios.html" title="Servicios">⚙</a>
+        <a href="#" title="Centro de ayuda">?</a>
+        <a href="facultad.html" title="Calendario">📅</a>
+      </div>
+      <span class="banner__avatar">SM</span>
+      <span class="user-name">SANTIAGO MARTINEZ</span>
+    </div>
+  </header>
+
+  <div class="subbar">Primer Semestre 2026 &nbsp;<small>· miUANDES</small></div>
+
+  <div class="breadcrumbs">
+    <a href="index.html">Inicio</a> <span class="sep">›</span> <span class="current">Info Alumno</span>
+  </div>
+
+  <main class="page">
+
+    <div class="titulo-vista">Info Alumno</div>
+
+    <div class="notif-bar">
+      <span class="dot"></span>
+      Notificación Alumno — Tienes avisos pendientes por revisar
+    </div>
+
+    <!-- Mobile dropdown -->
+    <select class="sidebar-mobile-select" onchange="showVista(this.value)">
+      <option value="info">Info Alumno</option>
+      <option value="semestre">Semestre Actual</option>
+      <option value="malla">Avance de Malla</option>
+    </select>
+
+    <div class="layout">
+
+      <div class="sidebar-menu desktop-only">
+        <button class="menu-item is-active" data-vista="info" onclick="showVista('info')">Info Alumno</button>
+        <button class="menu-item" data-vista="semestre" onclick="showVista('semestre')">Semestre Actual</button>
+        <button class="menu-item" data-vista="malla" onclick="showVista('malla')">Avance de Malla</button>
+      </div>
+
+      <div class="content-area">
+
+        <div class="vista activa" id="vista-info">
+          <h3>Información del Alumno</h3>
+          <div class="info-row"><span class="label">Nombre</span><span class="value">Santiago Martínez Fantuzzi</span></div>
+          <div class="info-row"><span class="label">RUT</span><span class="value">12.345.678-9</span></div>
+          <div class="info-row"><span class="label">Carrera</span><span class="value">Ingeniería Civil Industrial</span></div>
+          <div class="info-row"><span class="label">Semestre</span><span class="value">Primer Semestre 2026</span></div>
+          <div class="info-row"><span class="label">Avance Curricular</span><span class="value">72%</span></div>
+          <div class="info-row"><span class="label">Promedio Ponderado Acumulado</span><span class="value">7.0</span></div>
+          <div class="info-row"><span class="label">Créditos Aprobados</span><span class="value">180 / 250</span></div>
+          <div style="margin-top: 24px;">
+            <h3>Asignaturas Inscritas</h3>
+            <div class="info-row"><span class="label">Taller Diseño Digital y Fab. 3D</span><span class="value">I010 · Lunes 10:30–12:20</span></div>
+            <div class="info-row"><span class="label">Inteligencia Artificial Aplicada</span><span class="value">C-219 · Martes / Jueves</span></div>
+            <div class="info-row"><span class="label">Software Design</span><span class="value">B-20 · Jueves 17:30–19:20</span></div>
+            <div class="info-row"><span class="label">User Experience Design</span><span class="value">C-014 · Viernes 15:30–18:20</span></div>
+          </div>
+        </div>
+
+        <div class="vista" id="vista-semestre">
+          <h3>Semestre Actual — Primer Semestre 2026</h3>
+          <div class="info-row"><span class="label">Taller Diseño Digital y Fab. 3D</span><span class="value">En curso</span></div>
+          <div class="info-row"><span class="label">Inteligencia Artificial Aplicada</span><span class="value">En curso</span></div>
+          <div class="info-row"><span class="label">Software Design</span><span class="value">En curso</span></div>
+          <div class="info-row"><span class="label">User Experience Design</span><span class="value">En curso</span></div>
+        </div>
+
+        <div class="vista" id="vista-malla">
+          <div class="content-tabs">
+            <button class="content-tab is-active">Avance Malla</button>
+            <button class="content-tab">Adicional</button>
+          </div>
+
+          <div class="table-responsive">
+            <table class="resumen-table">
+              <tr><td>Promedio General (PGAG):</td><td>7.0</td></tr>
+              <tr><td>Promedio General Asignaturas Aprobadas (PGAA):</td><td>7.0</td></tr>
+              <tr><td>Posición relativa de PGAG:</td><td>169 de 203</td></tr>
+              <tr><td>Ranking de PGAG:</td><td>83.25%</td></tr>
+              <tr><td>Fecha de actualización de PGAG:</td><td>06/06/2026</td></tr>
+            </table>
+          </div>
+          <div class="resumen-disclaimer">
+            Se deja constancia que la posición puede variar por cambios de notas del alumno o alumnos de la misma generación
+          </div>
+
+          <div class="area-header">
+            <span>ING1.1 — Ing. Año 1 Sem.1</span>
+            <span>Créditos: 30</span>
+            <span class="estado-cumplido">Cumplido</span>
+          </div>
+          <div class="table-responsive">
+            <table class="malla-table">
+              <thead>
+                <tr>
+                  <th>#</th><th>Aprobado</th><th>Código</th><th>Nombre materia</th>
+                  <th>Periodo</th><th>Área</th><th>Título</th><th>Créd.</th><th>Calif.</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr><td>1</td><td class="check">✓</td><td>FRM1100</td><td>TEOLOGIA I</td><td>2021-1</td><td>FRM</td><td>TEOLOGIA I (ING)</td><td>3</td><td><span class="nota-badge">5.8</span></td></tr>
+                <tr><td>2</td><td class="check">✓</td><td>ING1100</td><td>ALGEBRA E INTR. AL CALCULO</td><td>2021-1</td><td>ING</td><td>ALGEBRA E INTR. AL CALCULO</td><td>10</td><td><span class="nota-badge">4.7</span></td></tr>
+                <tr><td>3</td><td class="check">✓</td><td>ING1102</td><td>FUNDAMENTOS DE QUIMICA</td><td>2021-1</td><td>ING</td><td>FUNDAMENTOS DE QUIMICA</td><td>5</td><td><span class="nota-badge">4.2</span></td></tr>
+                <tr><td>4</td><td class="check">✓</td><td>ING1103</td><td>PROGRAMACION</td><td>2021-1</td><td>ING</td><td>PROGRAMACION</td><td>5</td><td><span class="nota-badge">5.1</span></td></tr>
+                <tr><td>5</td><td class="check">✓</td><td>ING1105</td><td>TALLER DE PROYECTOS DE ING</td><td>2021-1</td><td>ING</td><td>TALLER DE PROYECTOS DE ING</td><td>3</td><td><span class="nota-badge">4.4</span></td></tr>
+                <tr><td>6</td><td class="check">✓</td><td>ING1106</td><td>ANTROPOLOGIA FILOSOFICA</td><td>2021-1</td><td>ING</td><td>ANTROPOLOGIA FILOSOFICA</td><td>3</td><td><span class="nota-badge">4.5</span></td></tr>
+                <tr><td>7</td><td class="check">✓</td><td>ING1400</td><td>BASES PARA EL ESTUDIO DE ING</td><td>2021-1</td><td>ING</td><td>BASES PARA EL ESTUDIO DE ING</td><td>1</td><td><span class="nota-badge">5.3</span></td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="area-header">
+            <span>ING1.2 — Ing. Año 1 Sem.2</span>
+            <span>Créditos: 29</span>
+            <span class="estado-cumplido">Cumplido</span>
+          </div>
+          <div class="table-responsive">
+            <table class="malla-table">
+              <thead>
+                <tr>
+                  <th>#</th><th>Aprobado</th><th>Código</th><th>Nombre materia</th>
+                  <th>Periodo</th><th>Área</th><th>Título</th><th>Créd.</th><th>Calif.</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr><td>1</td><td class="check">✓</td><td>ING1200</td><td>CALCULO I</td><td>2021-2</td><td>ING</td><td>CALCULO I</td><td>10</td><td><span class="nota-badge">4.3</span></td></tr>
+                <tr><td>2</td><td class="check">✓</td><td>ING1201</td><td>ALGEBRA LINEAL</td><td>2021-2</td><td>ING</td><td>ALGEBRA LINEAL</td><td>5</td><td><span class="nota-badge">4.8</span></td></tr>
+                <tr><td>3</td><td class="check">✓</td><td>ING1202</td><td>FISICA I</td><td>2021-2</td><td>ING</td><td>FISICA I</td><td>5</td><td><span class="nota-badge">4.1</span></td></tr>
+                <tr><td>4</td><td class="check">✓</td><td>ING1203</td><td>INTRODUCCION A LA ECONOMIA</td><td>2021-2</td><td>ING</td><td>INTRODUCCION A LA ECONOMIA</td><td>5</td><td><span class="nota-badge">5.6</span></td></tr>
+                <tr><td>5</td><td class="check">✓</td><td>FRM1200</td><td>ETICA</td><td>2021-2</td><td>FRM</td><td>ETICA (ING)</td><td>4</td><td><span class="nota-badge">5.0</span></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </main>
+
+  <div id="toast" class="toast"></div>
+  <footer class="proto">Prototipo · miUANDES rediseño · solo para entrevistas de usuario</footer>
+
+  <script src="shared.js"></script>
+  <script>
+    function showVista(id) {
+      document.querySelectorAll('.vista').forEach(function(v) { v.classList.remove('activa'); });
+      document.getElementById('vista-' + id).classList.add('activa');
+      document.querySelectorAll('.menu-item').forEach(function(m) { m.classList.remove('is-active'); });
+      var btn = document.querySelector('.menu-item[data-vista="' + id + '"]');
+      if (btn) btn.classList.add('is-active');
+      var sel = document.querySelector('.sidebar-mobile-select');
+      if (sel) sel.value = id;
+    }
+  </script>
+</body>
+</html>

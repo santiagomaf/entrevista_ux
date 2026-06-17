@@ -1,0 +1,291 @@
+/* ===========================================================
+   miUANDES — Prototipo de rediseño
+   Paleta oficial (banner rojo UANDES + blanco/gris)
+   =========================================================== */
+:root {
+  --rojo:        #E30613;
+  --rojo-osc:    #B7000F;
+  --rojo-claro:  #FCE9EA;
+  --gris-bg:     #EDEFF2;
+  --gris-borde:  #D9DDE3;
+  --gris-texto:  #4A4F57;
+  --gris-claro:  #8A9099;
+  --blanco:      #FFFFFF;
+  --tinta:       #222831;
+  --sombra:      0 1px 3px rgba(0,0,0,.08), 0 1px 2px rgba(0,0,0,.06);
+  --radio:       10px;
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  padding: 0;
+  font-family: "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  background: var(--gris-bg);
+  color: var(--tinta);
+  font-size: 15px;
+}
+
+a { color: inherit; text-decoration: none; }
+
+/* ---------- Header / banner oficial ---------- */
+.banner {
+  background: var(--rojo);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 24px;
+  height: 56px;
+  position: relative;
+}
+.banner__logo {
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: .5px;
+  flex-shrink: 0;
+}
+.banner__logo span { font-weight: 300; }
+.banner__nav {
+  display: flex;
+  align-items: center;
+  gap: 22px;
+}
+.banner__nav a {
+  font-size: 14px;
+  padding: 4px 2px;
+  opacity: .92;
+  border-bottom: 2px solid transparent;
+  transition: border-color .15s;
+  white-space: nowrap;
+}
+.banner__nav a:hover,
+.banner__nav a.is-active {
+  border-bottom-color: #fff;
+  opacity: 1;
+}
+.banner__user {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 13px;
+  font-weight: 600;
+  flex-shrink: 0;
+}
+.banner__icons {
+  display: flex; gap: 6px;
+}
+.banner__icons a {
+  display: flex; align-items: center; justify-content: center;
+  width: 30px; height: 30px; border-radius: 50%;
+  font-size: 14px; opacity: .92; transition: all .15s;
+  border-bottom: none !important;
+}
+.banner__icons a:hover {
+  background: rgba(255,255,255,.2); opacity: 1;
+}
+.banner__avatar {
+  width: 30px; height: 30px; border-radius: 50%;
+  background: #fff; color: var(--rojo);
+  display: grid; place-items: center; font-weight: 700; font-size: 13px;
+}
+.hamburger {
+  display: none; background: none; border: none; color: #fff;
+  font-size: 24px; cursor: pointer; padding: 4px;
+}
+
+/* barra de semestre */
+.subbar {
+  background: var(--blanco);
+  border-bottom: 1px solid var(--gris-borde);
+  padding: 10px 24px;
+  display: flex; align-items: center; gap: 10px;
+  font-weight: 600; color: var(--rojo);
+}
+.subbar small { color: var(--gris-claro); font-weight: 400; }
+
+/* ---------- Breadcrumbs ---------- */
+.breadcrumbs {
+  padding: 10px 24px;
+  font-size: 13px; color: var(--gris-claro);
+  display: flex; align-items: center; gap: 6px;
+}
+.breadcrumbs a {
+  color: var(--rojo); font-weight: 500;
+  transition: opacity .15s;
+}
+.breadcrumbs a:hover { opacity: .7; }
+.breadcrumbs .sep { color: var(--gris-borde); }
+.breadcrumbs .current { color: var(--gris-texto); font-weight: 600; }
+
+/* ---------- Layout general ---------- */
+.page { max-width: 1400px; margin: 0 auto; padding: 22px; }
+
+.titulo-vista {
+  display: flex; align-items: center; gap: 10px;
+  font-size: 26px; font-weight: 700; margin: 4px 0 20px;
+}
+.titulo-vista::before {
+  content: ""; width: 6px; height: 28px; background: var(--rojo);
+  border-radius: 3px;
+}
+
+/* ---------- Card / panel ---------- */
+.card {
+  background: var(--blanco);
+  border: 1px solid var(--gris-borde);
+  border-radius: var(--radio);
+  box-shadow: var(--sombra);
+  padding: 18px;
+}
+.card__title {
+  font-size: 15px; font-weight: 700; color: var(--rojo);
+  margin: 0 0 12px; display: flex; align-items: center; gap: 8px;
+}
+
+/* ---------- Botones de navegación lateral ---------- */
+.navbtn {
+  display: block; width: 100%;
+  background: var(--blanco);
+  border: 1.5px solid var(--gris-borde);
+  border-radius: var(--radio);
+  padding: 16px 14px;
+  margin-bottom: 12px;
+  text-align: center;
+  font-weight: 600; color: var(--gris-texto);
+  cursor: pointer;
+  transition: all .15s;
+}
+.navbtn:hover {
+  border-color: var(--rojo);
+  color: var(--rojo);
+  box-shadow: var(--sombra);
+}
+
+/* botón pill */
+.pill {
+  border: 1.5px solid var(--gris-borde);
+  background: var(--blanco);
+  border-radius: 999px;
+  padding: 8px 18px;
+  font-weight: 600; color: var(--gris-texto);
+  cursor: pointer; transition: all .15s;
+}
+.pill:hover, .pill.is-active {
+  background: var(--rojo); color: #fff; border-color: var(--rojo);
+}
+
+/* botón sólido */
+.btn {
+  background: var(--rojo); color: #fff; border: none;
+  border-radius: 8px; padding: 9px 18px; font-weight: 600; cursor: pointer;
+}
+.btn:hover { background: var(--rojo-osc); }
+
+/* utilidades */
+.grid { display: grid; gap: 18px; }
+.skeleton {
+  height: 10px; background: #c9d2dd; border-radius: 4px; margin: 8px 0;
+}
+.skeleton.s { width: 60%; }
+.skeleton.m { width: 80%; }
+
+/* ---------- Toast / Feedback global ---------- */
+.toast {
+  position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%) translateY(100px);
+  background: #222831; color: #fff;
+  padding: 14px 28px; border-radius: 10px;
+  font-size: 14px; font-weight: 600;
+  box-shadow: 0 6px 20px rgba(0,0,0,.25);
+  display: flex; align-items: center; gap: 10px;
+  z-index: 9999;
+  opacity: 0;
+  transition: all .35s cubic-bezier(.4,0,.2,1);
+  pointer-events: none;
+}
+.toast.toast-success { background: #28a745; }
+.toast.toast-info { background: #0d6efd; }
+.toast.show {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+  pointer-events: auto;
+}
+
+/* ---------- Modal de confirmación ---------- */
+.modal-overlay {
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,.4);
+  display: none; place-items: center;
+  z-index: 9998;
+}
+.modal-overlay.show { display: grid; }
+.modal {
+  background: var(--blanco);
+  border-radius: 12px;
+  padding: 28px; max-width: 420px; width: 90%;
+  box-shadow: 0 10px 40px rgba(0,0,0,.2);
+  text-align: center;
+}
+.modal h3 { margin: 0 0 10px; font-size: 18px; color: var(--tinta); }
+.modal p { margin: 0 0 20px; font-size: 14px; color: var(--gris-texto); line-height: 1.5; }
+.modal-btns { display: flex; gap: 10px; justify-content: center; }
+.modal-btns button {
+  padding: 10px 22px; border-radius: 8px; font-weight: 600;
+  font-size: 14px; cursor: pointer; border: none;
+}
+.modal-btns .btn-confirm { background: var(--rojo); color: #fff; }
+.modal-btns .btn-confirm:hover { background: var(--rojo-osc); }
+.modal-btns .btn-cancel {
+  background: var(--blanco); color: var(--gris-texto);
+  border: 1.5px solid var(--gris-borde);
+}
+.modal-btns .btn-cancel:hover { background: var(--gris-bg); }
+
+/* ---------- Tabla responsive wrapper ---------- */
+.table-responsive {
+  overflow-x: auto; -webkit-overflow-scrolling: touch;
+}
+
+/* hide on desktop, show on mobile */
+.mobile-only { display: none; }
+
+footer.proto {
+  text-align: center; color: var(--gris-claro);
+  font-size: 12px; padding: 18px;
+}
+
+/* Vista transitions */
+.vista { display: none; animation: fadeIn .2s ease; }
+.vista.activa { display: block; }
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+/* =============================================================
+   RESPONSIVE — Mobile (max 768px)
+   ============================================================= */
+@media (max-width: 768px) {
+  .banner { padding: 0 14px; flex-wrap: wrap; height: auto; min-height: 56px; }
+  .banner__nav {
+    display: none; flex-direction: column;
+    width: 100%; gap: 0; padding: 8px 0;
+    border-top: 1px solid rgba(255,255,255,.2);
+  }
+  .banner__nav.open { display: flex; }
+  .banner__nav a {
+    padding: 10px 0; border-bottom: none;
+    font-size: 15px; opacity: 1;
+  }
+  .banner__user .user-name { display: none; }
+  .hamburger { display: block; }
+
+  .subbar { padding: 8px 14px; font-size: 13px; }
+  .breadcrumbs { padding: 8px 14px; font-size: 12px; flex-wrap: wrap; }
+  .page { padding: 14px; }
+  .titulo-vista { font-size: 20px; margin: 0 0 14px; }
+
+  .mobile-only { display: block; }
+  .desktop-only { display: none; }
+
+  .pill { padding: 6px 14px; font-size: 13px; }
+  .navbtn { padding: 12px 10px; font-size: 13px; }
+}

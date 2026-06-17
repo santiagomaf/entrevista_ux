@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>miUANDES — Académico</title>
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    .pills { display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap; }
+    .layout { display: grid; grid-template-columns: 200px 1fr; gap: 18px; align-items: start; }
+
+    .sidebar-menu {
+      background: var(--blanco); border: 1px solid var(--gris-borde);
+      border-radius: var(--radio); box-shadow: var(--sombra); overflow: hidden;
+    }
+    .sidebar-menu .menu-item {
+      display: block; padding: 13px 14px; width: 100%;
+      font-size: 13px; font-weight: 500; color: var(--gris-texto);
+      border: none; background: none; text-align: left;
+      border-bottom: 1px solid var(--gris-borde); cursor: pointer; transition: all .12s;
+    }
+    .sidebar-menu .menu-item:last-child { border-bottom: none; }
+    .sidebar-menu .menu-item:hover { background: var(--rojo-claro); color: var(--rojo); }
+    .sidebar-menu .menu-item.is-active { background: var(--rojo); color: #fff; font-weight: 600; }
+
+    .content-area {
+      background: var(--blanco); border: 1px solid var(--gris-borde);
+      border-radius: var(--radio); box-shadow: var(--sombra); padding: 22px; min-height: 400px;
+    }
+    .content-area h3 {
+      margin: 0 0 16px; font-size: 16px; color: var(--rojo);
+      padding-bottom: 10px; border-bottom: 1px solid var(--gris-borde);
+    }
+    .vista { display: none; }
+    .vista.activa { display: block; }
+
+    .filtros-bar {
+      display: flex; gap: 14px; align-items: flex-end; flex-wrap: wrap;
+      margin-bottom: 18px; padding-bottom: 16px; border-bottom: 1px solid var(--gris-borde);
+    }
+    .filtro-group { display: flex; flex-direction: column; gap: 4px; }
+    .filtro-group label { font-size: 11px; font-weight: 600; color: var(--gris-claro); }
+    .filtro-group select, .filtro-group input {
+      padding: 7px 10px; border: 1px solid var(--gris-borde);
+      border-radius: 6px; font-size: 13px; color: var(--gris-texto);
+      background: var(--blanco); min-width: 150px;
+    }
+
+    .inner-tabs {
+      display: flex; gap: 0; margin-bottom: 18px; border-bottom: 2px solid var(--gris-borde);
+    }
+    .inner-tab {
+      padding: 9px 18px; font-size: 13px; font-weight: 600;
+      color: var(--gris-claro); cursor: pointer; border: none; background: none;
+      border-bottom: 2px solid transparent; margin-bottom: -2px; transition: all .15s;
+    }
+    .inner-tab.is-active { color: var(--rojo); border-bottom-color: var(--rojo); }
+    .inner-tab:hover { color: var(--rojo); }
+
+    .data-table { width: 100%; border-collapse: collapse; font-size: 12px; }
+    .data-table th {
+      background: var(--gris-bg); padding: 8px 10px;
+      font-weight: 600; color: var(--gris-texto); text-align: left;
+      border: 1px solid var(--gris-borde); white-space: nowrap;
+    }
+    .data-table td { padding: 8px 10px; border: 1px solid var(--gris-borde); color: var(--gris-texto); }
+    .data-table .empty-row { text-align: center; color: var(--gris-claro); padding: 28px; font-style: italic; }
+
+    .table-controls {
+      display: flex; justify-content: space-between; align-items: center;
+      margin-bottom: 10px; font-size: 12px; color: var(--gris-claro);
+    }
+    .table-controls input {
+      padding: 5px 10px; border: 1px solid var(--gris-borde);
+      border-radius: 6px; font-size: 12px; width: 160px;
+    }
+    .table-controls select {
+      padding: 3px 6px; border: 1px solid var(--gris-borde);
+      border-radius: 4px; font-size: 12px;
+    }
+    .table-footer {
+      display: flex; justify-content: space-between; align-items: center;
+      margin-top: 10px; font-size: 12px; color: var(--gris-claro);
+    }
+    .table-footer .paginacion { display: flex; gap: 4px; }
+    .table-footer .paginacion button {
+      padding: 4px 12px; border: 1px solid var(--gris-borde);
+      background: var(--blanco); border-radius: 4px; font-size: 12px;
+      color: var(--gris-texto); cursor: pointer;
+    }
+    .table-footer .paginacion button:hover { background: var(--gris-bg); }
+
+    .alerta-cerrado {
+      background: var(--gris-texto); color: #fff;
+      padding: 12px 16px; border-radius: 6px;
+      font-size: 13px; font-weight: 500; margin-bottom: 18px;
+      border-left: 4px solid var(--rojo);
+      display: flex; justify-content: space-between; align-items: center;
+      flex-wrap: wrap; gap: 10px;
+    }
+    .alerta-cerrado .alerta-action {
+      background: rgba(255,255,255,.15); color: #fff; border: 1px solid rgba(255,255,255,.3);
+      padding: 6px 14px; border-radius: 6px; font-size: 12px; font-weight: 600;
+      cursor: pointer; white-space: nowrap;
+    }
+    .alerta-cerrado .alerta-action:hover { background: rgba(255,255,255,.25); }
+
+    .btn-accion {
+      display: inline-block; background: var(--rojo); color: #fff; border: none;
+      border-radius: 8px; padding: 10px 20px; font-weight: 600;
+      font-size: 13px; cursor: pointer; margin-top: 14px;
+    }
+    .btn-accion:hover { background: var(--rojo-osc); }
+
+    @media (max-width: 768px) {
+      .layout { grid-template-columns: 1fr; }
+      .sidebar-menu { display: none; }
+      .table-controls { flex-direction: column; gap: 8px; align-items: flex-start; }
+      .table-footer { flex-direction: column; gap: 8px; align-items: flex-start; }
+    }
+  </style>
+</head>
+<body>
+
+  <header class="banner">
+    <div class="banner__logo">mi<span>UANDES</span></div>
+    <button class="hamburger" onclick="toggleNav()">☰</button>
+    <nav class="banner__nav">
+      <a href="index.html">Inicio</a>
+      <a href="info-alumno.html">Info Alumno</a>
+      <a href="servicio-financiero.html">Servicios Financieros</a>
+      <a href="certificados.html">Certificados</a>
+      <a href="facultad.html">Contacto Facultad</a>
+    </nav>
+    <div class="banner__user">
+      <div class="banner__icons">
+        <a href="index.html" title="Notificaciones">✉</a>
+        <a href="servicios-universitarios.html" title="Servicios">⚙</a>
+        <a href="#" title="Centro de ayuda">?</a>
+        <a href="facultad.html" title="Calendario">📅</a>
+      </div>
+      <span class="banner__avatar">SM</span>
+      <span class="user-name">SANTIAGO MARTINEZ</span>
+    </div>
+  </header>
+
+  <div class="subbar">Primer Semestre 2026 &nbsp;<small>· miUANDES</small></div>
+  <div class="breadcrumbs">
+    <a href="index.html">Inicio</a> <span class="sep">›</span> <span class="current" id="breadcrumb-current">Postulación Ayudantía</span>
+  </div>
+
+  <main class="page">
+    <div class="titulo-vista" id="titulo">Postulación Ayudantía</div>
+
+    <div class="pills">
+      <button class="pill is-active" onclick="showVista('ayudantia')">Ayudantía</button>
+      <button class="pill" onclick="showVista('practicas')">Prácticas</button>
+      <button class="pill" onclick="showVista('titulo')">Trabajo de Titulación</button>
+    </div>
+
+    <!-- ======= Ayudantía ======= -->
+    <div class="vista activa" id="vista-ayudantia">
+      <div class="layout">
+        <div class="sidebar-menu">
+          <button class="menu-item is-active">Postulación</button>
+          <button class="menu-item">Información</button>
+          <button class="menu-item">Historial</button>
+        </div>
+        <div class="content-area">
+          <div class="filtros-bar">
+            <div class="filtro-group">
+              <label>Periodo</label>
+              <select>
+                <option>Primer Semestre 2026 (2026-1)</option>
+                <option>Segundo Semestre 2025 (2025-2)</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="alerta-cerrado">
+            <span>El periodo de postulación está cerrado. El próximo periodo se abre en <strong>julio 2026</strong>.</span>
+            <button class="alerta-action" onclick="showToast('Te notificaremos cuando se abra el periodo de postulación','info')">Notificarme cuando abra</button>
+          </div>
+
+          <div class="inner-tabs">
+            <button class="inner-tab is-active">Postular</button>
+            <button class="inner-tab">Mis Postulaciones</button>
+            <button class="inner-tab">Asistencia Taller</button>
+            <button class="inner-tab">Datos de Pago</button>
+          </div>
+
+          <div class="table-controls">
+            <span>Mostrar <select><option>10</option></select> registros</span>
+            <span>Buscar: <input type="text" placeholder=""></span>
+          </div>
+
+          <div class="table-responsive">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Periodo</th><th>Código curso</th><th>Materia</th><th>Curso</th>
+                  <th>Sección</th><th>Título</th><th>Profesor</th><th>Rol</th><th>Acciones</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr><td colspan="9" class="empty-row">Ningún dato disponible en esta tabla</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="table-footer">
+            <span>Mostrando registros del 0 al 0 de un total de 0 registros</span>
+            <div class="paginacion"><button>Anterior</button><button>Siguiente</button></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ======= Prácticas ======= -->
+    <div class="vista" id="vista-practicas">
+      <div class="layout">
+        <div class="sidebar-menu">
+          <button class="menu-item is-active">Registro</button>
+          <button class="menu-item">Información</button>
+          <button class="menu-item">Convenios</button>
+        </div>
+        <div class="content-area">
+          <h3>Registro de Práctica</h3>
+          <div class="filtros-bar">
+            <div class="filtro-group"><label>Rut Alumno</label><input type="text" placeholder="Buscar Rut"></div>
+            <div class="filtro-group"><label>Etapa</label><select><option>Todas las etapas</option></select></div>
+            <div class="filtro-group"><label>Periodo de Inscripción</label><select><option>Todos los periodos</option><option>Primer Semestre 2026 (2026-1)</option></select></div>
+            <button class="btn-accion" style="margin-top: 0;" onclick="showToast('Formulario de registro abierto','info')">+ Agregar</button>
+          </div>
+
+          <div class="table-controls">
+            <span>Mostrar <select><option>10</option></select> registros</span>
+            <span>Buscar: <input type="text" placeholder=""></span>
+          </div>
+
+          <div class="table-responsive">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Nombre alumno</th><th>Rut</th><th>Institución</th>
+                  <th>F. inicio</th><th>F. fin</th><th>Periodo</th>
+                  <th>Oportunidad</th><th>Etapa</th><th>Estado</th><th>Ver</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr><td colspan="10" class="empty-row">Ningún dato disponible en esta tabla</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="table-footer">
+            <span>Mostrando registros del 0 al 0 de un total de 0 registros</span>
+            <div class="paginacion"><button>Anterior</button><button>Siguiente</button></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ======= Trabajo de Titulación ======= -->
+    <div class="vista" id="vista-titulo">
+      <div class="layout">
+        <div class="sidebar-menu">
+          <button class="menu-item is-active">Registro</button>
+          <button class="menu-item">Información</button>
+          <button class="menu-item">Documentos</button>
+        </div>
+        <div class="content-area">
+          <h3>Trabajo de Titulación</h3>
+          <div class="filtros-bar">
+            <div class="filtro-group"><label>Periodo de Inscripción</label><select><option>Primer Semestre 2026 (2026-1)</option><option>Segundo Semestre 2025 (2025-2)</option></select></div>
+            <button class="btn-accion" style="margin-top: 0;" onclick="showToast('Formulario de registro abierto','info')">+ Agregar</button>
+          </div>
+
+          <div class="table-controls">
+            <span>Mostrar <select><option>10</option></select> registros</span>
+            <span>Buscar: <input type="text" placeholder=""></span>
+          </div>
+
+          <div class="table-responsive">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>ID</th><th>Carrera</th><th>Periodo</th><th>Fecha Registro</th>
+                  <th>Alumno</th><th>Rut</th><th>Título</th><th>Modalidad</th>
+                  <th>Prof. Guía Interno</th><th>Prof. Guía Externo</th>
+                  <th>Etapa</th><th>Estado</th><th>Acciones</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr><td colspan="13" class="empty-row">Ningún dato disponible en esta tabla</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="table-footer">
+            <span>Mostrando registros del 0 al 0 de un total de 0 registros</span>
+            <div class="paginacion"><button>Anterior</button><button>Siguiente</button></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <div id="toast" class="toast"></div>
+  <footer class="proto">Prototipo · miUANDES rediseño · solo para entrevistas de usuario</footer>
+
+  <script src="shared.js"></script>
+  <script>
+    var titulos = {
+      ayudantia: 'Postulación Ayudantía',
+      practicas: 'Registro de Práctica',
+      titulo: 'Trabajo de Titulación'
+    };
+    function showVista(id) {
+      document.querySelectorAll('.vista').forEach(function(v) { v.classList.remove('activa'); });
+      document.getElementById('vista-' + id).classList.add('activa');
+      document.querySelectorAll('.pills .pill').forEach(function(p) { p.classList.remove('is-active'); });
+      var map = { ayudantia: 0, practicas: 1, titulo: 2 };
+      document.querySelectorAll('.pills .pill')[map[id]].classList.add('is-active');
+      document.getElementById('titulo').textContent = titulos[id];
+      document.getElementById('breadcrumb-current').textContent = titulos[id];
+    }
+  </script>
+</body>
+</html>

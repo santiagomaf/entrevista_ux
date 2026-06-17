@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>miUANDES — Inicio</title>
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    .landing {
+      display: grid;
+      grid-template-columns: 220px 1fr 220px;
+      gap: 14px;
+      align-items: stretch;
+    }
+    .landing > div:first-child {
+      display: flex; flex-direction: column;
+    }
+    .landing > div:first-child .info-card {
+      flex: 1;
+    }
+
+    .info-card {
+      background: var(--blanco);
+      border: 1px solid var(--gris-borde);
+      border-radius: var(--radio);
+      box-shadow: var(--sombra);
+      overflow: hidden;
+    }
+    .info-card__tabs {
+      display: flex; border-bottom: 1px solid var(--gris-borde);
+    }
+    .info-card__tab {
+      flex: 1; padding: 10px 8px; text-align: center;
+      font-size: 13px; font-weight: 600; color: var(--gris-claro);
+      cursor: pointer; border-bottom: 2px solid transparent;
+      transition: all .15s; background: none; border-top: none; border-left: none; border-right: none;
+    }
+    .info-card__tab.is-active {
+      color: var(--rojo); border-bottom-color: var(--rojo);
+    }
+    .info-card__body { padding: 14px; }
+    .info-card__panel { display: none; }
+    .info-card__panel.activa { display: block; }
+    .notif-item {
+      display: flex; align-items: flex-start; gap: 8px;
+      padding: 8px 0; border-bottom: 1px solid var(--gris-borde);
+      font-size: 13px; color: var(--gris-texto);
+    }
+    .notif-item:last-child { border-bottom: none; }
+    .notif-dot {
+      width: 8px; height: 8px; border-radius: 50%;
+      background: var(--rojo); flex-shrink: 0; margin-top: 4px;
+    }
+    .notif-item span { line-height: 1.4; }
+
+    .horario {
+      background: var(--blanco);
+      border: 1px solid var(--gris-borde);
+      border-radius: var(--radio);
+      box-shadow: var(--sombra);
+      display: flex; flex-direction: column;
+      overflow: hidden;
+    }
+    .horario__head {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 10px 14px; border-bottom: 1px solid var(--gris-borde);
+    }
+    .horario__head h2 { margin: 0; font-size: 16px; color: var(--rojo); }
+    .horario table {
+      width: 100%; border-collapse: collapse; font-size: 10px;
+    }
+    .horario th {
+      background: var(--gris-bg); padding: 4px 3px;
+      font-weight: 600; color: var(--gris-texto); text-align: center;
+      border: 1px solid var(--gris-borde); font-size: 10px;
+    }
+    .horario td {
+      border: 1px solid var(--gris-borde); padding: 2px 3px;
+      text-align: center; vertical-align: middle; height: 28px;
+    }
+    .horario td.hora { white-space: nowrap; font-size: 9px; color: var(--gris-claro); }
+    .horario .clase {
+      background: var(--rojo-claro); color: var(--rojo);
+      border-radius: 4px; padding: 3px 2px;
+      font-weight: 600; font-size: 9px; line-height: 1.25;
+    }
+
+    .accesos {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px;
+      margin-top: 14px;
+    }
+    .acceso {
+      background: var(--blanco);
+      border: 1.5px solid var(--gris-borde);
+      border-radius: var(--radio);
+      box-shadow: var(--sombra);
+      padding: 22px 16px; text-align: center;
+      font-weight: 700; color: var(--gris-texto);
+      transition: all .15s; cursor: pointer;
+    }
+    .acceso:hover { border-color: var(--rojo); color: var(--rojo); transform: translateY(-2px); }
+    .acceso small { display: block; font-weight: 400; color: var(--gris-claro); margin-top: 4px; }
+
+    /* --- Panel IA (compacto, no protagonista) --- */
+    .landing .navbtn { padding: 12px 10px; margin-bottom: 8px; font-size: 13px; }
+    .navbtn--sm { padding: 10px 8px !important; margin-bottom: 8px !important; font-size: 13px !important; }
+
+    .ia-panel {
+      background: #fff0f1;
+      border: 1px solid #f0d0d3;
+      border-radius: var(--radio);
+      box-shadow: var(--sombra);
+      padding: 12px 14px;
+      font-size: 12px;
+    }
+    .ia-panel__header {
+      display: flex; justify-content: space-between; align-items: center;
+      margin-bottom: 8px;
+    }
+    .ia-panel__title {
+      font-size: 12px; font-weight: 700; color: var(--gris-texto);
+      display: flex; align-items: center; gap: 6px;
+    }
+    .ia-badge {
+      background: var(--rojo); color: #fff; padding: 2px 6px;
+      border-radius: 999px; font-size: 9px; font-weight: 700;
+      letter-spacing: .5px;
+    }
+    .ia-panel__time { font-size: 10px; color: var(--gris-claro); }
+    .ia-insights { display: flex; flex-direction: column; gap: 0; }
+    .ia-insight {
+      display: flex; align-items: baseline; gap: 7px;
+      padding: 6px 0; border-bottom: 1px solid #f0d0d3;
+      font-size: 12px; line-height: 1.4; color: var(--gris-texto);
+    }
+    .ia-insight:last-child { border-bottom: none; padding-bottom: 0; }
+    .ia-insight__emoji { font-size: 12px; flex-shrink: 0; }
+    .ia-insight__text { flex: 1; }
+    .ia-insight__text strong { color: var(--tinta); }
+    .ia-link {
+      color: var(--rojo); font-weight: 600; text-decoration: none;
+      font-size: 11px; margin-left: 3px;
+    }
+    .ia-link:hover { text-decoration: underline; }
+
+    @media (max-width: 768px) {
+      .landing { grid-template-columns: 1fr; }
+      .accesos { grid-template-columns: 1fr; }
+      .horario { overflow-x: auto; }
+    }
+  </style>
+</head>
+<body>
+
+  <header class="banner">
+    <div class="banner__logo">mi<span>UANDES</span></div>
+    <button class="hamburger" onclick="toggleNav()">☰</button>
+    <nav class="banner__nav">
+      <a href="index.html" class="is-active">Inicio</a>
+      <a href="info-alumno.html">Info Alumno</a>
+      <a href="servicio-financiero.html">Servicios Financieros</a>
+      <a href="certificados.html">Certificados</a>
+      <a href="facultad.html">Contacto Facultad</a>
+    </nav>
+    <div class="banner__user">
+      <div class="banner__icons">
+        <a href="index.html" title="Notificaciones">✉</a>
+        <a href="servicios-universitarios.html" title="Servicios">⚙</a>
+        <a href="#" title="Centro de ayuda" onclick="showToast('Sección de ayuda en desarrollo','info')">?</a>
+        <a href="facultad.html" title="Calendario">📅</a>
+      </div>
+      <span class="banner__avatar">SM</span>
+      <span class="user-name">SANTIAGO MARTINEZ</span>
+    </div>
+  </header>
+
+  <div class="subbar">
+    Primer Semestre 2026 &nbsp;<small>· miUANDES</small>
+  </div>
+
+  <main class="page">
+
+    <div class="landing">
+
+      <div>
+        <button class="navbtn">Toma de Ramos</button>
+        <button class="navbtn">Postulación Minor</button>
+
+        <div class="info-card" style="margin-top:4px;">
+          <div class="info-card__tabs">
+            <button class="info-card__tab is-active" onclick="switchTab(this, 'panel-noticias')">Noticias</button>
+            <button class="info-card__tab" onclick="switchTab(this, 'panel-notif')">Notificaciones</button>
+          </div>
+          <div class="info-card__body">
+            <div class="info-card__panel activa" id="panel-noticias">
+              <div class="notif-item">
+                <span class="notif-dot"></span>
+                <span>TNE ALUMNOS NUEVOS (Pase Escolar)</span>
+              </div>
+              <div class="notif-item">
+                <span class="notif-dot"></span>
+                <span>Bonificación Prioridad Académica Segundo Semestre 2026</span>
+              </div>
+              <div class="notif-item">
+                <span class="notif-dot"></span>
+                <span>Resultados Mantención Becas Académicas 2026</span>
+              </div>
+            </div>
+            <div class="info-card__panel" id="panel-notif">
+              <div class="notif-item">
+                <span class="notif-dot"></span>
+                <span>Tu cuota 5 vence el 05/07/2026</span>
+              </div>
+              <div class="notif-item">
+                <span class="notif-dot"></span>
+                <span>Nuevo horario publicado para Semestre 2026-1</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="horario">
+        <div class="horario__head">
+          <h2>Horario</h2>
+          <button class="pill">Semana 15/06 – 20/06</button>
+        </div>
+        <div class="table-responsive">
+          <table>
+            <thead>
+              <tr>
+                <th>Hora</th><th>Lunes</th><th>Martes</th><th>Miércoles</th><th>Jueves</th><th>Viernes</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td class="hora">08:30–09:20</td><td></td><td></td><td></td><td></td><td></td></tr>
+              <tr><td class="hora">09:30–10:20</td><td></td><td></td><td></td><td></td><td></td></tr>
+              <tr>
+                <td class="hora">10:30–11:20</td>
+                <td rowspan="2"><div class="clase">TALLER DISEÑO DIGITAL Y FAB. 3D<br>I010 / ING</div></td>
+                <td></td><td></td>
+                <td rowspan="2"><div class="clase">INTELIGENCIA ARTIFICIAL APLICADA<br>I105 / ING</div></td>
+                <td></td>
+              </tr>
+              <tr><td class="hora">11:30–12:20</td><td></td><td></td><td></td></tr>
+              <tr><td class="hora">12:30–13:20</td><td></td><td></td><td></td><td></td><td></td></tr>
+              <tr>
+                <td class="hora">13:30–14:20</td>
+                <td></td>
+                <td rowspan="2"><div class="clase">INTELIGENCIA ARTIFICIAL APLICADA<br>C-219 / CIEN · LABT</div></td>
+                <td></td><td></td><td></td>
+              </tr>
+              <tr><td class="hora">14:30–15:20</td><td></td><td></td><td></td><td></td></tr>
+              <tr>
+                <td class="hora">15:30–16:20</td>
+                <td></td><td></td><td></td><td></td>
+                <td rowspan="3"><div class="clase">USER EXPERIENCE DESIGN<br>C-014 / CIEN</div></td>
+              </tr>
+              <tr><td class="hora">16:30–17:20</td><td></td><td></td><td></td><td></td></tr>
+              <tr>
+                <td class="hora">17:30–18:20</td>
+                <td></td><td></td><td></td>
+                <td rowspan="2"><div class="clase">SOFTWARE DESIGN<br>B-20 / BIB</div></td>
+              </tr>
+              <tr><td class="hora">18:30–19:20</td><td></td><td></td><td></td><td></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div>
+        <a class="navbtn navbtn--sm" href="template.html">Ayudantía</a>
+        <a class="navbtn navbtn--sm" href="template.html">Prácticas</a>
+        <a class="navbtn navbtn--sm" href="template.html">Título</a>
+        <a class="navbtn navbtn--sm" href="facultad.html">Contacto Facultad</a>
+        <a class="navbtn navbtn--sm" href="servicios-universitarios.html">Servicios Univ.</a>
+
+        <!-- Panel IA -->
+        <div class="ia-panel" style="margin-top: 4px;">
+          <div class="ia-panel__header">
+            <div class="ia-panel__title">Resumen <span class="ia-badge">IA</span></div>
+            <div class="ia-panel__time">hace 5 min</div>
+          </div>
+          <div class="ia-insights">
+            <div class="ia-insight">
+              <span class="ia-insight__emoji">💰</span>
+              <div class="ia-insight__text"><strong>Cuota 5 vence en 18 días</strong> <a class="ia-link" href="servicio-financiero.html">Pagar →</a></div>
+            </div>
+            <div class="ia-insight">
+              <span class="ia-insight__emoji">📉</span>
+              <div class="ia-insight__text"><strong>Promedio bajó 0.2</strong> — PGA: 7.0 <a class="ia-link" href="info-alumno.html">Ver →</a></div>
+            </div>
+            <div class="ia-insight">
+              <span class="ia-insight__emoji">🎓</span>
+              <div class="ia-insight__text"><strong>Puedes inscribir Práctica I</strong> el próx. sem. <a class="ia-link" href="template.html">Ver →</a></div>
+            </div>
+            <div class="ia-insight">
+              <span class="ia-insight__emoji">📅</span>
+              <div class="ia-insight__text"><strong>Próxima clase en 2h:</strong> IA Aplicada, C-219</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="accesos">
+      <a class="acceso" href="info-alumno.html">Info Alumno<small>Avance de Malla</small></a>
+      <a class="acceso" href="servicio-financiero.html">Servicios Financieros<small>Pagos · Becas · CAE</small></a>
+      <a class="acceso" href="certificados.html">Certificados<small>Emitir · Valores</small></a>
+    </div>
+
+  </main>
+
+  <div id="toast" class="toast"></div>
+  <footer class="proto">Prototipo · miUANDES rediseño · solo para entrevistas de usuario</footer>
+
+  <script src="shared.js"></script>
+  <script>
+    function switchTab(btn, panelId) {
+      document.querySelectorAll('.info-card__tab').forEach(t => t.classList.remove('is-active'));
+      document.querySelectorAll('.info-card__panel').forEach(p => p.classList.remove('activa'));
+      btn.classList.add('is-active');
+      document.getElementById(panelId).classList.add('activa');
+    }
+  </script>
+
+</body>
+</html>

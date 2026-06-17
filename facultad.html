@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>miUANDES — Contacto Facultad</title>
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    .layout-fac { display: grid; grid-template-columns: 1fr 300px; gap: 18px; align-items: start; }
+    .centro {
+      background: var(--blanco); border: 1px solid var(--gris-borde);
+      border-radius: var(--radio); box-shadow: var(--sombra); overflow: hidden;
+    }
+    .filtros {
+      display: flex; gap: 12px; padding: 14px 18px;
+      border-bottom: 1px solid var(--gris-borde); background: var(--gris-bg);
+    }
+    .filtros label {
+      font-size: 12px; font-weight: 600; color: var(--gris-texto);
+      display: flex; flex-direction: column; gap: 4px;
+    }
+    .filtros select {
+      padding: 7px 10px; border: 1px solid var(--gris-borde);
+      border-radius: 6px; font-size: 13px; color: var(--gris-texto);
+      background: var(--blanco); cursor: pointer; min-width: 160px;
+    }
+    .calendario { padding: 18px; }
+    .calendario h3 { margin: 0 0 14px; font-size: 18px; color: var(--rojo); }
+    .cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); text-align: center; font-size: 13px; }
+    .cal-grid .day-head {
+      padding: 8px 4px; font-weight: 700; color: var(--gris-texto);
+      background: var(--gris-bg); border: 1px solid var(--gris-borde);
+    }
+    .cal-grid .day {
+      padding: 10px 4px; border: 1px solid var(--gris-borde);
+      color: var(--gris-texto); min-height: 42px; cursor: default; position: relative;
+    }
+    .cal-grid .day.empty { background: #fafbfc; }
+    .cal-grid .day.hoy { background: var(--rojo); color: #fff; font-weight: 700; }
+    .cal-grid .day.evento { background: var(--rojo-claro); font-weight: 600; color: var(--rojo); cursor: help; }
+
+    .reunion-panel {
+      background: var(--blanco); border: 1px solid var(--gris-borde);
+      border-radius: var(--radio); box-shadow: var(--sombra); padding: 22px;
+    }
+    .reunion-panel h3 {
+      margin: 0 0 16px; font-size: 16px; color: var(--rojo);
+      padding-bottom: 10px; border-bottom: 1px solid var(--gris-borde);
+    }
+    .form-group { margin-bottom: 14px; }
+    .form-group label { display: block; font-size: 12px; font-weight: 600; color: var(--gris-texto); margin-bottom: 5px; }
+    .form-group select,
+    .form-group input,
+    .form-group textarea {
+      width: 100%; padding: 9px 12px;
+      border: 1px solid var(--gris-borde); border-radius: 6px;
+      font-size: 13px; color: var(--gris-texto); background: var(--blanco); font-family: inherit;
+    }
+    .form-group textarea { resize: vertical; min-height: 80px; }
+    .form-group .error-msg {
+      color: var(--rojo); font-size: 11px; margin-top: 4px; display: none;
+    }
+    .form-group.has-error .error-msg { display: block; }
+    .form-group.has-error select,
+    .form-group.has-error input,
+    .form-group.has-error textarea { border-color: var(--rojo); }
+    .btn-reunion {
+      width: 100%; background: var(--rojo); color: #fff; border: none;
+      border-radius: 8px; padding: 12px; font-weight: 600;
+      font-size: 14px; cursor: pointer; margin-top: 4px;
+    }
+    .btn-reunion:hover { background: var(--rojo-osc); }
+
+    @media (max-width: 768px) {
+      .layout-fac { grid-template-columns: 1fr; }
+      .filtros { flex-direction: column; }
+    }
+  </style>
+</head>
+<body>
+
+  <header class="banner">
+    <div class="banner__logo">mi<span>UANDES</span></div>
+    <button class="hamburger" onclick="toggleNav()">☰</button>
+    <nav class="banner__nav">
+      <a href="index.html">Inicio</a>
+      <a href="info-alumno.html">Info Alumno</a>
+      <a href="servicio-financiero.html">Servicios Financieros</a>
+      <a href="certificados.html">Certificados</a>
+      <a href="facultad.html" class="is-active">Contacto Facultad</a>
+    </nav>
+    <div class="banner__user">
+      <div class="banner__icons">
+        <a href="index.html" title="Notificaciones">✉</a>
+        <a href="servicios-universitarios.html" title="Servicios">⚙</a>
+        <a href="#" title="Centro de ayuda">?</a>
+        <a href="facultad.html" title="Calendario">📅</a>
+      </div>
+      <span class="banner__avatar">SM</span>
+      <span class="user-name">SANTIAGO MARTINEZ</span>
+    </div>
+  </header>
+
+  <div class="subbar">Primer Semestre 2026 &nbsp;<small>· miUANDES</small></div>
+  <div class="breadcrumbs">
+    <a href="index.html">Inicio</a> <span class="sep">›</span> <span class="current">Contacto Facultad</span>
+  </div>
+
+  <main class="page">
+    <div class="titulo-vista">Contacto Facultad</div>
+
+    <div class="layout-fac">
+      <div class="centro">
+        <div class="filtros">
+          <label>Carrera
+            <select><option>Ing. Civil Industrial</option><option>Ing. Civil en Computación</option><option>Ing. Civil Eléctrica</option></select>
+          </label>
+          <label>Formato
+            <select><option>Mensual</option><option>Semanal</option></select>
+          </label>
+        </div>
+        <div class="calendario">
+          <h3>Calendario — Junio 2026</h3>
+          <div class="cal-grid">
+            <div class="day-head">Lu</div><div class="day-head">Ma</div><div class="day-head">Mi</div><div class="day-head">Ju</div><div class="day-head">Vi</div><div class="day-head">Sá</div><div class="day-head">Do</div>
+            <div class="day">1</div><div class="day">2</div><div class="day">3</div><div class="day">4</div><div class="day evento" title="Cierre de notas parciales">5</div><div class="day">6</div><div class="day">7</div>
+            <div class="day">8</div><div class="day">9</div><div class="day">10</div><div class="day">11</div><div class="day">12</div><div class="day">13</div><div class="day">14</div>
+            <div class="day">15</div><div class="day">16</div><div class="day hoy" title="Hoy">17</div><div class="day">18</div><div class="day">19</div><div class="day">20</div><div class="day">21</div>
+            <div class="day">22</div><div class="day evento" title="Entrega proyecto final IA">23</div><div class="day">24</div><div class="day">25</div><div class="day">26</div><div class="day">27</div><div class="day">28</div>
+            <div class="day evento" title="Inicio período de exámenes">29</div><div class="day">30</div><div class="day empty"></div><div class="day empty"></div><div class="day empty"></div><div class="day empty"></div><div class="day empty"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="reunion-panel">
+        <h3>Pedir Reunión</h3>
+        <form id="reunion-form" onsubmit="return submitReunion(event)">
+          <div class="form-group">
+            <label>Con quién</label>
+            <select required><option value="">Seleccionar...</option><option>Director de carrera</option><option>Jefe de docencia</option><option>Secretaría académica</option><option>Coordinador de prácticas</option></select>
+          </div>
+          <div class="form-group">
+            <label>Fecha preferida</label>
+            <input type="date" min="2026-06-17" value="2026-06-20" required>
+          </div>
+          <div class="form-group">
+            <label>Horario</label>
+            <select><option>Mañana (09:00 – 12:00)</option><option>Tarde (14:00 – 17:00)</option></select>
+          </div>
+          <div class="form-group" id="motivo-group">
+            <label>Motivo</label>
+            <textarea placeholder="Describe brevemente el motivo de la reunión..." required></textarea>
+            <div class="error-msg">Por favor describe el motivo de la reunión</div>
+          </div>
+          <button type="submit" class="btn-reunion">Solicitar Reunión →</button>
+        </form>
+      </div>
+    </div>
+  </main>
+
+  <div id="toast" class="toast"></div>
+  <footer class="proto">Prototipo · miUANDES rediseño · solo para entrevistas de usuario</footer>
+
+  <script src="shared.js"></script>
+  <script>
+    function submitReunion(e) {
+      e.preventDefault();
+      var ta = document.querySelector('#motivo-group textarea');
+      var grp = document.getElementById('motivo-group');
+      if (!ta.value.trim()) {
+        grp.classList.add('has-error');
+        ta.focus();
+        return false;
+      }
+      grp.classList.remove('has-error');
+      showToast('Solicitud de reunión enviada correctamente');
+      e.target.reset();
+      return false;
+    }
+  </script>
+</body>
+</html>

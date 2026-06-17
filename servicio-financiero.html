@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>miUANDES — Servicio Financiero</title>
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    .pills { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 20px; }
+    .layout { display: grid; grid-template-columns: 240px 1fr; gap: 18px; align-items: start; }
+
+    .sidebar-menu {
+      background: var(--blanco); border: 1px solid var(--gris-borde);
+      border-radius: var(--radio); box-shadow: var(--sombra); overflow: hidden;
+    }
+    .sidebar-menu .menu-item {
+      display: block; padding: 12px 14px; width: 100%;
+      font-size: 13px; font-weight: 500; color: var(--gris-texto);
+      border: none; background: none; text-align: left;
+      border-bottom: 1px solid var(--gris-borde); cursor: pointer; transition: all .12s;
+    }
+    .sidebar-menu .menu-item:last-child { border-bottom: none; }
+    .sidebar-menu .menu-item:hover { background: var(--rojo-claro); color: var(--rojo); }
+    .sidebar-menu .menu-item.is-active { background: var(--rojo); color: #fff; font-weight: 600; }
+
+    .content-area {
+      background: var(--blanco); border: 1px solid var(--gris-borde);
+      border-radius: var(--radio); box-shadow: var(--sombra); padding: 22px; min-height: 400px;
+    }
+    .content-area h3 {
+      margin: 0 0 16px; font-size: 16px; color: var(--rojo);
+      padding-bottom: 10px; border-bottom: 1px solid var(--gris-borde);
+    }
+    .vista { display: none; }
+    .vista.activa { display: block; }
+
+    .pagos-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    .pagos-table th {
+      background: var(--gris-bg); padding: 8px 12px;
+      font-weight: 600; color: var(--gris-texto); text-align: left;
+      border: 1px solid var(--gris-borde);
+    }
+    .pagos-table td { padding: 8px 12px; border: 1px solid var(--gris-borde); color: var(--gris-texto); }
+    .estado-pagado { color: #28a745; font-weight: 600; }
+    .estado-pendiente { color: var(--rojo); font-weight: 600; }
+    .estado-proxima {
+      color: #e6a800; font-weight: 700;
+      background: #fff8e1; padding: 2px 8px; border-radius: 4px;
+    }
+
+    .barra-container { margin-top: 20px; }
+    .barra-label { display: flex; justify-content: space-between; font-size: 12px; color: var(--gris-claro); margin-bottom: 4px; }
+    .barra { height: 22px; background: var(--gris-borde); border-radius: 6px; overflow: hidden; }
+    .barra-fill { height: 100%; background: var(--rojo); border-radius: 6px; transition: width .4s; }
+
+    .info-row {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 10px 0; border-bottom: 1px solid var(--gris-borde); font-size: 13px;
+    }
+    .info-row:last-child { border-bottom: none; }
+    .info-row .label { color: var(--gris-claro); font-weight: 500; }
+    .info-row .value { font-weight: 600; color: var(--tinta); }
+
+    .btn-descargar {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: var(--rojo); color: #fff; border: none;
+      border-radius: 8px; padding: 12px 22px; font-weight: 600;
+      font-size: 14px; cursor: pointer; margin-top: 12px;
+    }
+    .btn-descargar:hover { background: var(--rojo-osc); }
+
+    @media (max-width: 768px) {
+      .layout { grid-template-columns: 1fr; }
+      .sidebar-menu { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <header class="banner">
+    <div class="banner__logo">mi<span>UANDES</span></div>
+    <button class="hamburger" onclick="toggleNav()">☰</button>
+    <nav class="banner__nav">
+      <a href="index.html">Inicio</a>
+      <a href="info-alumno.html">Info Alumno</a>
+      <a href="servicio-financiero.html" class="is-active">Servicios Financieros</a>
+      <a href="certificados.html">Certificados</a>
+      <a href="facultad.html">Contacto Facultad</a>
+    </nav>
+    <div class="banner__user">
+      <div class="banner__icons">
+        <a href="index.html" title="Notificaciones">✉</a>
+        <a href="servicios-universitarios.html" title="Servicios">⚙</a>
+        <a href="#" title="Centro de ayuda">?</a>
+        <a href="facultad.html" title="Calendario">📅</a>
+      </div>
+      <span class="banner__avatar">SM</span>
+      <span class="user-name">SANTIAGO MARTINEZ</span>
+    </div>
+  </header>
+
+  <div class="subbar">Primer Semestre 2026 &nbsp;<small>· miUANDES</small></div>
+  <div class="breadcrumbs">
+    <a href="index.html">Inicio</a> <span class="sep">›</span> <span class="current">Servicios Financieros</span>
+  </div>
+
+  <main class="page">
+    <div class="titulo-vista">Servicio Financiero</div>
+
+    <div class="pills">
+      <button class="pill is-active" onclick="showVista('pagos')">Pagos</button>
+      <button class="pill" onclick="showVista('cae')">CAE</button>
+      <button class="pill" onclick="showVista('becas')">Becas</button>
+      <button class="pill" onclick="showVista('pagare')">Descargar Pagaré ↓</button>
+    </div>
+
+    <div class="layout">
+      <div class="sidebar-menu">
+        <button class="menu-item is-active" data-vista="pagos" onclick="showVista('pagos')">Pagos</button>
+        <button class="menu-item" data-vista="cae" onclick="showVista('cae')">CAE</button>
+        <button class="menu-item" data-vista="becas" onclick="showVista('becas')">Becas</button>
+        <button class="menu-item" data-vista="pagare" onclick="showVista('pagare')">Descargar Pagaré</button>
+      </div>
+
+      <div class="content-area">
+        <div class="vista activa" id="vista-pagos">
+          <h3>Estado de Pagos — 2026</h3>
+          <div class="barra-container">
+            <div class="barra-label"><span>Pagado</span><span>4 de 10 cuotas (40%)</span></div>
+            <div class="barra"><div class="barra-fill" style="width: 40%"></div></div>
+          </div>
+          <div class="table-responsive">
+            <table class="pagos-table" style="margin-top: 18px;">
+              <thead><tr><th>Cuota</th><th>Monto</th><th>Vencimiento</th><th>Estado</th></tr></thead>
+              <tbody>
+                <tr><td>Cuota 1</td><td>$520.000</td><td>05/03/2026</td><td class="estado-pagado">Pagado</td></tr>
+                <tr><td>Cuota 2</td><td>$520.000</td><td>05/04/2026</td><td class="estado-pagado">Pagado</td></tr>
+                <tr><td>Cuota 3</td><td>$520.000</td><td>05/05/2026</td><td class="estado-pagado">Pagado</td></tr>
+                <tr><td>Cuota 4</td><td>$520.000</td><td>05/06/2026</td><td class="estado-pagado">Pagado</td></tr>
+                <tr><td>Cuota 5</td><td>$520.000</td><td>05/07/2026</td><td><span class="estado-proxima">⚠ Próxima a vencer</span></td></tr>
+                <tr><td>Cuota 6</td><td>$520.000</td><td>05/08/2026</td><td class="estado-pendiente">Pendiente</td></tr>
+                <tr><td>Cuota 7</td><td>$520.000</td><td>05/09/2026</td><td class="estado-pendiente">Pendiente</td></tr>
+                <tr><td>Cuota 8</td><td>$520.000</td><td>05/10/2026</td><td class="estado-pendiente">Pendiente</td></tr>
+                <tr><td>Cuota 9</td><td>$520.000</td><td>05/11/2026</td><td class="estado-pendiente">Pendiente</td></tr>
+                <tr><td>Cuota 10</td><td>$520.000</td><td>05/12/2026</td><td class="estado-pendiente">Pendiente</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <button class="btn-descargar" style="margin-top: 18px;" onclick="showModal('Ir a pagar', 'Serás redirigido al portal de pagos de la universidad. ¿Deseas continuar?', function(){ showToast('Redirigiendo al portal de pagos...','info'); })">Ir a pagar →</button>
+        </div>
+
+        <div class="vista" id="vista-cae">
+          <h3>Crédito con Aval del Estado (CAE)</h3>
+          <div class="info-row"><span class="label">Estado</span><span class="value">Vigente</span></div>
+          <div class="info-row"><span class="label">Banco</span><span class="value">Banco Estado</span></div>
+          <div class="info-row"><span class="label">Monto anual asignado</span><span class="value">$2.800.000</span></div>
+          <div class="info-row"><span class="label">Cobertura</span><span class="value">50% del arancel</span></div>
+          <div class="info-row"><span class="label">Período de gracia</span><span class="value">18 meses post egreso</span></div>
+        </div>
+
+        <div class="vista" id="vista-becas">
+          <h3>Becas y Beneficios</h3>
+          <div class="info-row"><span class="label">Beca Excelencia Académica</span><span class="value" style="color: #28a745;">Activa — 15% descuento arancel</span></div>
+          <div class="info-row"><span class="label">Beca Alimentación JUNAEB</span><span class="value" style="color: #28a745;">Activa</span></div>
+          <div class="info-row"><span class="label">Postulación Beca UAndes Económica</span><span class="value">Disponible hasta 30/07/2026</span></div>
+          <button class="btn-descargar" style="margin-top: 18px;" onclick="showModal('Postular a Beca', '¿Deseas iniciar la postulación a la Beca UAndes Económica?', function(){ showToast('Postulación iniciada correctamente'); })">Postular a Beca →</button>
+        </div>
+
+        <div class="vista" id="vista-pagare">
+          <h3>Descargar Pagaré</h3>
+          <p style="font-size: 13px; color: var(--gris-texto); line-height: 1.6;">
+            Descarga tu pagaré correspondiente al año académico 2026.
+            Este documento debe ser firmado y entregado en la oficina de Servicios Financieros.
+          </p>
+          <div class="info-row"><span class="label">Documento</span><span class="value">Pagaré Arancel 2026</span></div>
+          <div class="info-row"><span class="label">Formato</span><span class="value">PDF</span></div>
+          <button class="btn-descargar" onclick="showToast('Pagaré descargado correctamente')">↓ Descargar Pagaré</button>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <div id="toast" class="toast"></div>
+  <div id="modal-overlay" class="modal-overlay">
+    <div class="modal">
+      <h3></h3><p></p>
+      <div class="modal-btns">
+        <button class="btn-cancel" onclick="closeModal()">Cancelar</button>
+        <button class="btn-confirm" onclick="confirmModal()">Continuar</button>
+      </div>
+    </div>
+  </div>
+
+  <footer class="proto">Prototipo · miUANDES rediseño · solo para entrevistas de usuario</footer>
+
+  <script src="shared.js"></script>
+  <script>
+    function showVista(id) {
+      document.querySelectorAll('.vista').forEach(function(v) { v.classList.remove('activa'); });
+      document.getElementById('vista-' + id).classList.add('activa');
+      document.querySelectorAll('.menu-item').forEach(function(m) { m.classList.remove('is-active'); });
+      var btn = document.querySelector('.menu-item[data-vista="' + id + '"]');
+      if (btn) btn.classList.add('is-active');
+      document.querySelectorAll('.pills .pill').forEach(function(p) { p.classList.remove('is-active'); });
+      var pills = document.querySelectorAll('.pills .pill');
+      var map = { pagos: 0, cae: 1, becas: 2, pagare: 3 };
+      if (pills[map[id]]) pills[map[id]].classList.add('is-active');
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>miUANDES — Certificados</title>
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    .pills { display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap; }
+    .vista { display: none; }
+    .vista.activa { display: block; }
+
+    .cert-list { display: flex; flex-direction: column; gap: 12px; }
+    .cert-item {
+      background: var(--blanco); border: 1px solid var(--gris-borde);
+      border-radius: var(--radio); box-shadow: var(--sombra);
+      padding: 16px 20px; display: flex; justify-content: space-between; align-items: center;
+      transition: all .15s;
+    }
+    .cert-item:hover { border-color: var(--rojo); box-shadow: 0 2px 8px rgba(0,0,0,.1); }
+    .cert-info h4 { margin: 0 0 4px; font-size: 14px; color: var(--tinta); }
+    .cert-info p { margin: 0; font-size: 12px; color: var(--gris-claro); }
+    .cert-btn {
+      background: var(--rojo); color: #fff; border: none;
+      border-radius: 8px; padding: 8px 16px; font-weight: 600;
+      font-size: 13px; cursor: pointer; white-space: nowrap; transition: all .2s;
+    }
+    .cert-btn:hover { background: var(--rojo-osc); }
+    .cert-btn.done { background: #28a745; pointer-events: none; }
+
+    .valores-table {
+      width: 100%; border-collapse: collapse; font-size: 13px;
+      background: var(--blanco); border: 1px solid var(--gris-borde);
+      border-radius: var(--radio); overflow: hidden; box-shadow: var(--sombra);
+    }
+    .valores-table th {
+      background: var(--gris-bg); padding: 10px 16px;
+      font-weight: 600; color: var(--gris-texto); text-align: left;
+      border-bottom: 1px solid var(--gris-borde);
+    }
+    .valores-table td {
+      padding: 10px 16px; border-bottom: 1px solid var(--gris-borde); color: var(--gris-texto);
+    }
+    .valores-table tr:last-child td { border-bottom: none; }
+
+    @media (max-width: 768px) {
+      .cert-item { flex-direction: column; gap: 10px; align-items: flex-start; }
+      .cert-btn { width: 100%; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+
+  <header class="banner">
+    <div class="banner__logo">mi<span>UANDES</span></div>
+    <button class="hamburger" onclick="toggleNav()">☰</button>
+    <nav class="banner__nav">
+      <a href="index.html">Inicio</a>
+      <a href="info-alumno.html">Info Alumno</a>
+      <a href="servicio-financiero.html">Servicios Financieros</a>
+      <a href="certificados.html" class="is-active">Certificados</a>
+      <a href="facultad.html">Contacto Facultad</a>
+    </nav>
+    <div class="banner__user">
+      <div class="banner__icons">
+        <a href="index.html" title="Notificaciones">✉</a>
+        <a href="servicios-universitarios.html" title="Servicios">⚙</a>
+        <a href="#" title="Centro de ayuda">?</a>
+        <a href="facultad.html" title="Calendario">📅</a>
+      </div>
+      <span class="banner__avatar">SM</span>
+      <span class="user-name">SANTIAGO MARTINEZ</span>
+    </div>
+  </header>
+
+  <div class="subbar">Primer Semestre 2026 &nbsp;<small>· miUANDES</small></div>
+  <div class="breadcrumbs">
+    <a href="index.html">Inicio</a> <span class="sep">›</span> <span class="current">Certificados</span>
+  </div>
+
+  <main class="page">
+    <div class="titulo-vista">Certificados</div>
+    <div class="pills">
+      <button class="pill is-active" onclick="showVista('emitir')">Emitir</button>
+      <button class="pill" onclick="showVista('valores')">Valores</button>
+      <button class="pill" onclick="showVista('emitidos')">Certificados Emitidos</button>
+    </div>
+
+    <div class="vista activa" id="vista-emitir">
+      <div class="cert-list">
+        <div class="cert-item"><div class="cert-info"><h4>Certificado de Alumno Regular</h4><p>Acredita matrícula vigente en la universidad</p></div><button class="cert-btn" onclick="emitirCert(this)">Emitir y descargar</button></div>
+        <div class="cert-item"><div class="cert-info"><h4>Certificado de Notas</h4><p>Historial de calificaciones por semestre</p></div><button class="cert-btn" onclick="emitirCert(this)">Emitir y descargar</button></div>
+        <div class="cert-item"><div class="cert-info"><h4>Certificado de Situación Socioeconómica</h4><p>Para trámites de becas y beneficios</p></div><button class="cert-btn" onclick="emitirCert(this)">Emitir y descargar</button></div>
+        <div class="cert-item"><div class="cert-info"><h4>Certificado de Avance Curricular</h4><p>Detalle de créditos aprobados y porcentaje de avance</p></div><button class="cert-btn" onclick="emitirCert(this)">Emitir y descargar</button></div>
+        <div class="cert-item"><div class="cert-info"><h4>Certificado de Ranking / PGA</h4><p>Posición relativa dentro de la generación</p></div><button class="cert-btn" onclick="emitirCert(this)">Emitir y descargar</button></div>
+        <div class="cert-item"><div class="cert-info"><h4>Concentración de Notas</h4><p>Resumen completo de calificaciones de la carrera</p></div><button class="cert-btn" onclick="emitirCert(this)">Emitir y descargar</button></div>
+      </div>
+    </div>
+
+    <div class="vista" id="vista-valores">
+      <div class="table-responsive">
+        <table class="valores-table">
+          <thead><tr><th>Certificado</th><th>Valor</th><th>Plazo emisión</th></tr></thead>
+          <tbody>
+            <tr><td>Certificado de Alumno Regular</td><td>Gratuito</td><td>Inmediato</td></tr>
+            <tr><td>Certificado de Notas</td><td>Gratuito</td><td>Inmediato</td></tr>
+            <tr><td>Certificado de Situación Socioeconómica</td><td>Gratuito</td><td>3 días hábiles</td></tr>
+            <tr><td>Certificado de Avance Curricular</td><td>Gratuito</td><td>Inmediato</td></tr>
+            <tr><td>Certificado de Ranking / PGA</td><td>Gratuito</td><td>Inmediato</td></tr>
+            <tr><td>Concentración de Notas</td><td>$5.000</td><td>5 días hábiles</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="vista" id="vista-emitidos">
+      <div class="cert-list">
+        <div class="cert-item"><div class="cert-info"><h4>Certificado de Alumno Regular</h4><p>Emitido el 10/03/2026</p></div><button class="cert-btn" onclick="showToast('Certificado descargado')">Descargar ↓</button></div>
+        <div class="cert-item"><div class="cert-info"><h4>Certificado de Notas</h4><p>Emitido el 22/04/2026</p></div><button class="cert-btn" onclick="showToast('Certificado descargado')">Descargar ↓</button></div>
+        <div class="cert-item"><div class="cert-info"><h4>Certificado de Alumno Regular</h4><p>Emitido el 15/01/2026</p></div><button class="cert-btn" onclick="showToast('Certificado descargado')">Descargar ↓</button></div>
+      </div>
+    </div>
+  </main>
+
+  <div id="toast" class="toast"></div>
+  <footer class="proto">Prototipo · miUANDES rediseño · solo para entrevistas de usuario</footer>
+
+  <script src="shared.js"></script>
+  <script>
+    function showVista(id) {
+      document.querySelectorAll('.vista').forEach(function(v) { v.classList.remove('activa'); });
+      document.getElementById('vista-' + id).classList.add('activa');
+      document.querySelectorAll('.pills .pill').forEach(function(p) { p.classList.remove('is-active'); });
+      var map = { emitir: 0, valores: 1, emitidos: 2 };
+      document.querySelectorAll('.pills .pill')[map[id]].classList.add('is-active');
+    }
+    function emitirCert(btn) {
+      btn.textContent = 'Generando...';
+      btn.style.opacity = '.7';
+      setTimeout(function() {
+        btn.textContent = '✓ Descargado';
+        btn.className = 'cert-btn done';
+        btn.style.opacity = '1';
+        showToast('Certificado emitido y descargado correctamente');
+      }, 1200);
+    }
+  </script>
+</body>
+</html>
