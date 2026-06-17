@@ -102,7 +102,14 @@
     .acceso small { display: block; font-weight: 400; color: var(--gris-claro); margin-top: 4px; }
 
     /* --- Panel IA (compacto, no protagonista) --- */
-    .landing .navbtn { padding: 12px 10px; margin-bottom: 8px; font-size: 13px; }
+    .landing .navbtn {
+      padding: 12px 10px; margin-bottom: 8px; font-size: 13px;
+      display: flex; align-items: center; justify-content: center; gap: 6px;
+    }
+    .navbtn--acad { box-shadow: inset 6px 0 0 var(--rojo); }
+    .navbtn--proc { box-shadow: inset 6px 0 0 #e6a800; }
+    .navbtn--fac  { box-shadow: inset 6px 0 0 #5b7fdb; }
+    .navbtn--serv { box-shadow: inset 6px 0 0 #28a745; }
     .navbtn--sm { padding: 10px 8px !important; margin-bottom: 8px !important; font-size: 13px !important; }
 
     .ia-panel {
@@ -153,7 +160,7 @@
 <body>
 
   <header class="banner">
-    <div class="banner__logo">mi<span>UANDES</span></div>
+    <a href="index.html" class="banner__logo">mi<span>UANDES</span></a>
     <button class="hamburger" onclick="toggleNav()">☰</button>
     <nav class="banner__nav">
       <a href="index.html" class="is-active">Inicio</a>
@@ -183,8 +190,8 @@
     <div class="landing">
 
       <div>
-        <button class="navbtn">Toma de Ramos</button>
-        <button class="navbtn">Postulación Minor</button>
+        <button class="navbtn navbtn--acad">📝 Toma de Ramos</button>
+        <button class="navbtn navbtn--acad">📋 Postulación Minor</button>
 
         <div class="info-card" style="margin-top:4px;">
           <div class="info-card__tabs">
@@ -270,11 +277,11 @@
       </div>
 
       <div>
-        <a class="navbtn navbtn--sm" href="template.html">Ayudantía</a>
-        <a class="navbtn navbtn--sm" href="template.html">Prácticas</a>
-        <a class="navbtn navbtn--sm" href="template.html">Título</a>
-        <a class="navbtn navbtn--sm" href="facultad.html">Contacto Facultad</a>
-        <a class="navbtn navbtn--sm" href="servicios-universitarios.html">Servicios Univ.</a>
+        <a class="navbtn navbtn--sm navbtn--proc" href="template.html">👨‍🏫 Ayudantía</a>
+        <a class="navbtn navbtn--sm navbtn--proc" href="template.html">💼 Prácticas</a>
+        <a class="navbtn navbtn--sm navbtn--proc" href="template.html">🎓 Título</a>
+        <a class="navbtn navbtn--sm navbtn--fac" href="facultad.html">📅 Contacto Facultad</a>
+        <a class="navbtn navbtn--sm navbtn--serv" href="servicios-universitarios.html">🏛 Servicios Univ.</a>
 
         <!-- Panel IA -->
         <div class="ia-panel" style="margin-top: 4px;">
